@@ -258,6 +258,71 @@ function EducationCard({ item }) {
 /* --------------------------------------------------------------------------
  * Application
  * -------------------------------------------------------------------------- */
+/**
+ * Large, reliable navigation controls for touch devices.
+ * Left/right moves between CV sections; up/down moves through section details.
+ */
+function MobileNavigation() {
+  const navigate = (direction) => {
+    const deck = window.RevealDeck;
+
+    if (!deck) {
+      return;
+    }
+
+    const actions = {
+      left: () => deck.left(),
+      right: () => deck.right(),
+      up: () => deck.up(),
+      down: () => deck.down(),
+    };
+
+    actions[direction]?.();
+  };
+
+  return (
+    <nav className="mobile-navigation" aria-label="CV presentation navigation">
+      <button
+        type="button"
+        className="mobile-nav-button"
+        onClick={() => navigate('left')}
+        aria-label="Previous section"
+      >
+        ←
+      </button>
+
+      <div className="mobile-nav-vertical">
+        <button
+          type="button"
+          className="mobile-nav-button"
+          onClick={() => navigate('up')}
+          aria-label="Previous detail"
+        >
+          ↑
+        </button>
+
+        <button
+          type="button"
+          className="mobile-nav-button"
+          onClick={() => navigate('down')}
+          aria-label="Next detail"
+        >
+          ↓
+        </button>
+      </div>
+
+      <button
+        type="button"
+        className="mobile-nav-button"
+        onClick={() => navigate('right')}
+        aria-label="Next section"
+      >
+        →
+      </button>
+    </nav>
+  );
+}
+
 function App() {
   const deckElementRef = useRef(null);
   const revealInstanceRef = useRef(null);
@@ -272,6 +337,9 @@ function App() {
       hash: true,
       center: false,
       controls: true,
+      controlsTutorial: true,
+      controlsLayout: 'bottom-right',
+      navigationMode: 'default',
       progress: true,
       slideNumber: 'c/t',
       touch: true,
@@ -313,8 +381,9 @@ function App() {
   }, []);
 
   return (
-    <div ref={deckElementRef} className="reveal">
-      <div className="slides">
+    <div className="presentation-app">
+      <div ref={deckElementRef} className="reveal">
+        <div className="slides">
         {/* ==================================================================
             Cover letter
             ================================================================== */}
@@ -616,7 +685,10 @@ function App() {
             </div>
           </section>
         </section>
+        </div>
       </div>
+
+      <MobileNavigation />
     </div>
   );
 }

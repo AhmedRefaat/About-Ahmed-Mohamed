@@ -950,3 +950,160 @@ blockquote {
     padding: 1rem;
   }
 }
+
+/* ========================================================================== 
+   14. Touch-device navigation and portrait scrolling
+   ========================================================================== */
+
+/*
+ * The custom touch controls are siblings of the Reveal.js canvas rather than
+ * children of it. This prevents Reveal's transforms from moving the controls
+ * outside the viewport in portrait orientation.
+ */
+.presentation-app {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  overflow: hidden;
+}
+
+.reveal,
+.reveal .slides {
+  overscroll-behavior: none;
+}
+
+.mobile-navigation {
+  display: none;
+}
+
+/*
+ * Enable the controls on narrow screens and touch-first devices. The second
+ * condition also keeps them available after a phone rotates to landscape.
+ */
+@media (max-width: 800px), (hover: none) and (pointer: coarse) {
+  .presentation-app {
+    width: 100dvw;
+    height: 100dvh;
+    min-height: 100dvh;
+  }
+
+  /* Preserve vertical pan/scroll instead of blocking every touch gesture. */
+  .reveal {
+    touch-action: pan-y pinch-zoom;
+  }
+
+  /* The custom buttons replace Reveal's small touch controls. */
+  .reveal .controls {
+    display: none !important;
+  }
+
+  .mobile-navigation {
+    position: fixed;
+    z-index: 99999;
+    right: max(12px, env(safe-area-inset-right));
+    bottom: max(12px, env(safe-area-inset-bottom));
+    display: grid;
+    grid-template-columns: 54px 54px 54px;
+    gap: 8px;
+    align-items: end;
+    pointer-events: none;
+  }
+
+  .mobile-nav-vertical {
+    display: grid;
+    gap: 8px;
+  }
+
+  .mobile-nav-button {
+    display: grid;
+    place-items: center;
+    width: 54px;
+    height: 54px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: 50%;
+    color: var(--ink);
+    background: rgba(7, 16, 24, 0.92);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    pointer-events: auto;
+    touch-action: manipulation;
+    box-shadow:
+      0 10px 28px rgba(0, 0, 0, 0.5),
+      inset 0 0 0 1px rgba(25, 211, 197, 0.1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mobile-nav-button:active {
+    color: #061014;
+    border-color: var(--cyan);
+    background: var(--cyan);
+    transform: scale(0.92);
+  }
+
+  .mobile-nav-button:focus-visible {
+    outline: 3px solid var(--cyan);
+    outline-offset: 2px;
+  }
+
+  /* Reserve clear space at the bottom for the fixed navigation buttons. */
+  .section-frame,
+  .hero {
+    padding:
+      60px
+      clamp(22px, 5vw, 48px)
+      125px;
+  }
+
+  /* Long detail views remain scrollable in portrait orientation. */
+  .letter,
+  .education,
+  .role-layout,
+  .skills,
+  .contact {
+    max-height: calc(
+      100dvh
+      - 180px
+      - env(safe-area-inset-top)
+      - env(safe-area-inset-bottom)
+    );
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Portrait phones need compact controls and a shorter cover composition. */
+@media (max-width: 800px) and (orientation: portrait) {
+  .mobile-navigation {
+    grid-template-columns: 50px 50px 50px;
+    gap: 7px;
+  }
+
+  .mobile-nav-button {
+    width: 50px;
+    height: 50px;
+    font-size: 1.35rem;
+  }
+
+  .hero {
+    padding-top: 44px;
+  }
+
+  .hero-grid {
+    align-content: start;
+    gap: 0.9rem;
+  }
+
+  .hero-profile {
+    max-height: 210px;
+  }
+}
