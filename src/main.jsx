@@ -263,34 +263,36 @@ function EducationCard({ item }) {
  * Left/right moves between CV sections; up/down moves through section details.
  */
 function MobileNavigation() {
+  const lastNavigationRef = useRef(0);
+
   const navigate = (direction, event) => {
-    // Stop Reveal.js and the mobile browser from consuming the same gesture.
-    event.preventDefault();
-    event.stopPropagation();
+    event?.preventDefault();
+    event?.stopPropagation();
+
+    // Ignore the synthetic click that mobile Safari can emit immediately
+    // after touchend, while still allowing normal mouse clicks.
+    const now = Date.now();
+    if (now - lastNavigationRef.current < 250) {
+      return;
+    }
+    lastNavigationRef.current = now;
 
     const deck = window.RevealDeck;
-
-    if (!deck || !deck.isReady()) {
+    if (!deck) {
       return;
     }
 
-    const { h, v } = deck.getIndices();
+    const { h = 0, v = 0 } = deck.getIndices();
+    const routes = {
+      left: [Math.max(0, h - 1), 0],
+      right: [h + 1, 0],
+      up: [h, Math.max(0, v - 1)],
+      down: [h, v + 1],
+    };
 
-    switch (direction) {
-      case 'left':
-        deck.slide(Math.max(0, h - 1), 0);
-        break;
-      case 'right':
-        deck.slide(h + 1, 0);
-        break;
-      case 'up':
-        deck.slide(h, Math.max(0, v - 1));
-        break;
-      case 'down':
-        deck.slide(h, v + 1);
-        break;
-      default:
-        break;
+    const target = routes[direction];
+    if (target) {
+      deck.slide(target[0], target[1]);
     }
   };
 
@@ -298,7 +300,8 @@ function MobileNavigation() {
     <button
       type="button"
       className={`mobile-nav-button mobile-nav-${direction}`}
-      onPointerDown={(event) => navigate(direction, event)}
+      onClick={(event) => navigate(direction, event)}
+      onTouchEnd={(event) => navigate(direction, event)}
       aria-label={label}
     >
       {symbol}
