@@ -368,28 +368,62 @@ function App() {
 
     revealInstanceRef.current = deck;
 
+    let layoutTimer;
+
+    const updateLayout = () => {
+      window.clearTimeout(layoutTimer);
+
+      layoutTimer = window.setTimeout(() => {
+        const size = getResponsiveDeckSize();
+        deck.configure(size);
+        deck.layout();
+      }, 40);
+    };
+
+    const scheduleLayoutPasses = () => {
+      updateLayout();
+      window.requestAnimationFrame(updateLayout);
+      window.setTimeout(updateLayout, 180);
+      window.setTimeout(updateLayout, 500);
+    };
+
     deck
       .initialize()
       .then(() => {
         window.RevealDeck = deck;
-        deck.layout();
+
+        deck.on('ready', scheduleLayoutPasses);
+        deck.on('slidechanged', scheduleLayoutPasses);
+        deck.on('resize', scheduleLayoutPasses);
+
+        document.fonts?.ready.then(scheduleLayoutPasses);
+
+        deckElementRef.current
+          ?.querySelectorAll('img')
+          .forEach((image) => {
+            if (!image.complete) {
+              image.addEventListener('load', scheduleLayoutPasses, { once: true });
+            }
+          });
+
+        scheduleLayoutPasses();
       })
       .catch((error) => {
         console.error('Reveal.js initialization failed:', error);
       });
 
-    const updateLayout = () => {
-      const size = getResponsiveDeckSize();
-      deck.configure(size);
-      deck.layout();
-    };
-
-    window.addEventListener('resize', updateLayout, { passive: true });
-    window.addEventListener('orientationchange', updateLayout, { passive: true });
+    window.addEventListener('load', scheduleLayoutPasses, { passive: true });
+    window.addEventListener('resize', scheduleLayoutPasses, { passive: true });
+    window.addEventListener('orientationchange', scheduleLayoutPasses, { passive: true });
 
     return () => {
-      window.removeEventListener('resize', updateLayout);
-      window.removeEventListener('orientationchange', updateLayout);
+      window.clearTimeout(layoutTimer);
+      window.removeEventListener('load', scheduleLayoutPasses);
+      window.removeEventListener('resize', scheduleLayoutPasses);
+      window.removeEventListener('orientationchange', scheduleLayoutPasses);
+      deck.off('ready', scheduleLayoutPasses);
+      deck.off('slidechanged', scheduleLayoutPasses);
+      deck.off('resize', scheduleLayoutPasses);
       delete window.RevealDeck;
 
       if (revealInstanceRef.current) {
