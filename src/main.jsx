@@ -263,64 +263,75 @@ function EducationCard({ item }) {
  * Left/right moves between CV sections; up/down moves through section details.
  */
 function MobileNavigation() {
-  const navigate = (direction) => {
+  const navigate = (direction, event) => {
+    // Stop Reveal.js and the mobile browser from consuming the same gesture.
+    event.preventDefault();
+    event.stopPropagation();
+
     const deck = window.RevealDeck;
 
-    if (!deck) {
+    if (!deck || !deck.isReady()) {
       return;
     }
 
-    const actions = {
-      left: () => deck.left(),
-      right: () => deck.right(),
-      up: () => deck.up(),
-      down: () => deck.down(),
-    };
+    const { h, v } = deck.getIndices();
 
-    actions[direction]?.();
+    switch (direction) {
+      case 'left':
+        deck.slide(Math.max(0, h - 1), 0);
+        break;
+      case 'right':
+        deck.slide(h + 1, 0);
+        break;
+      case 'up':
+        deck.slide(h, Math.max(0, v - 1));
+        break;
+      case 'down':
+        deck.slide(h, v + 1);
+        break;
+      default:
+        break;
+    }
   };
+
+  const button = (direction, label, symbol) => (
+    <button
+      type="button"
+      className={`mobile-nav-button mobile-nav-${direction}`}
+      onPointerDown={(event) => navigate(direction, event)}
+      aria-label={label}
+    >
+      {symbol}
+    </button>
+  );
 
   return (
     <nav className="mobile-navigation" aria-label="CV presentation navigation">
-      <button
-        type="button"
-        className="mobile-nav-button"
-        onClick={() => navigate('left')}
-        aria-label="Previous section"
-      >
-        ←
-      </button>
-
-      <div className="mobile-nav-vertical">
-        <button
-          type="button"
-          className="mobile-nav-button"
-          onClick={() => navigate('up')}
-          aria-label="Previous detail"
-        >
-          ↑
-        </button>
-
-        <button
-          type="button"
-          className="mobile-nav-button"
-          onClick={() => navigate('down')}
-          aria-label="Next detail"
-        >
-          ↓
-        </button>
-      </div>
-
-      <button
-        type="button"
-        className="mobile-nav-button"
-        onClick={() => navigate('right')}
-        aria-label="Next section"
-      >
-        →
-      </button>
+      {button('left', 'Previous section', '←')}
+      {button('up', 'Previous detail', '↑')}
+      {button('down', 'Next detail', '↓')}
+      {button('right', 'Next section', '→')}
     </nav>
   );
+}
+
+function getResponsiveDeckSize() {
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  const isTouchLayout = width <= 900 || window.matchMedia('(pointer: coarse)').matches;
+
+  if (!isTouchLayout) {
+    return { width: 1440, height: 900 };
+  }
+
+  if (height >= width) {
+    // Portrait phone/tablet: use a portrait canvas instead of shrinking a
+    // 1440 x 900 landscape canvas into a very narrow viewport.
+    return { width: 430, height: 820 };
+  }
+
+  // Landscape phone/tablet.
+  return { width: 900, height: 430 };
 }
 
 function App() {
@@ -346,8 +357,7 @@ function App() {
       keyboard: true,
       overview: true,
       transition: 'slide',
-      width: 1440,
-      height: 900,
+      ...getResponsiveDeckSize(),
       margin: 0.035,
       minScale: 0.2,
       maxScale: 1.0,
@@ -365,7 +375,18 @@ function App() {
         console.error('Reveal.js initialization failed:', error);
       });
 
+    const updateLayout = () => {
+      const size = getResponsiveDeckSize();
+      deck.configure(size);
+      deck.layout();
+    };
+
+    window.addEventListener('resize', updateLayout, { passive: true });
+    window.addEventListener('orientationchange', updateLayout, { passive: true });
+
     return () => {
+      window.removeEventListener('resize', updateLayout);
+      window.removeEventListener('orientationchange', updateLayout);
       delete window.RevealDeck;
 
       if (revealInstanceRef.current) {

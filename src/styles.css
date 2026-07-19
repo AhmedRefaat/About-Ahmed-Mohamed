@@ -1107,3 +1107,167 @@ blockquote {
     max-height: 210px;
   }
 }
+
+/* ========================================================================== 
+   15. Compact and reliable touch navigation overrides
+   ========================================================================== */
+
+/*
+ * A single four-button dock is easier to reach and does not cover the profile
+ * card. Pointer events are handled directly in React using onPointerDown.
+ */
+@media (max-width: 900px), (hover: none) and (pointer: coarse) {
+  .mobile-navigation {
+    position: fixed;
+    z-index: 2147483647;
+    right: auto;
+    bottom: max(10px, env(safe-area-inset-bottom));
+    left: 50%;
+    display: grid;
+    grid-template-columns: repeat(4, 46px);
+    gap: 7px;
+    align-items: center;
+    padding: 7px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    background: rgba(7, 16, 24, 0.86);
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.46);
+    transform: translateX(-50%);
+    pointer-events: auto;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .mobile-nav-vertical {
+    display: contents;
+  }
+
+  .mobile-nav-button {
+    width: 46px;
+    height: 46px;
+    margin: 0;
+    padding: 0;
+    border: 1px solid rgba(25, 211, 197, 0.32);
+    border-radius: 50%;
+    color: var(--ink);
+    background: rgba(11, 28, 39, 0.96);
+    font-size: 1.25rem;
+    line-height: 1;
+    pointer-events: auto;
+    touch-action: none;
+  }
+
+  .mobile-nav-button:active {
+    color: #061014;
+    background: var(--cyan);
+    transform: scale(0.9);
+  }
+
+  /* The Reveal canvas receives swipe gestures; the dock receives button taps. */
+  .reveal {
+    touch-action: none;
+  }
+
+  /* Keep content clear of the compact bottom dock. */
+  .section-frame,
+  .hero {
+    padding-bottom: 92px;
+  }
+}
+
+/* Portrait uses a true portrait Reveal canvas and readable, stacked content. */
+@media (max-width: 900px) and (orientation: portrait) {
+  .presentation-app,
+  .reveal {
+    width: 100dvw;
+    height: 100dvh;
+  }
+
+  .hero {
+    padding: 34px 22px 92px;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    gap: 12px;
+    align-content: start;
+    height: auto;
+  }
+
+  .hero-profile {
+    grid-template-columns: 108px minmax(0, 1fr);
+    grid-template-rows: 128px;
+    width: 100%;
+    max-width: none;
+    max-height: 128px;
+    border-radius: 16px;
+  }
+
+  .profile-photo-frame {
+    width: 108px;
+    height: 128px;
+  }
+
+  .profile-summary {
+    min-width: 0;
+    padding: 8px 10px;
+  }
+
+  .profile-signature-logo {
+    width: 42px;
+    height: 24px;
+    margin-bottom: 2px;
+  }
+
+  .profile-summary p,
+  .profile-location,
+  .profile-status {
+    font-size: 0.58rem !important;
+    line-height: 1.22 !important;
+  }
+
+  .profile-status {
+    margin-top: 4px !important;
+    padding-top: 4px;
+  }
+
+  .section-frame {
+    padding: 48px 22px 92px;
+  }
+
+  .letter,
+  .education,
+  .role-layout,
+  .skills,
+  .contact {
+    max-height: calc(100dvh - 145px);
+    overflow-y: auto;
+    touch-action: pan-y;
+  }
+}
+
+/* Landscape keeps controls compact and away from the slide content. */
+@media (max-height: 520px) and (orientation: landscape) {
+  .mobile-navigation {
+    right: max(10px, env(safe-area-inset-right));
+    bottom: max(8px, env(safe-area-inset-bottom));
+    left: auto;
+    grid-template-columns: repeat(4, 38px);
+    gap: 5px;
+    padding: 5px;
+    transform: none;
+  }
+
+  .mobile-nav-button {
+    width: 38px;
+    height: 38px;
+    font-size: 1rem;
+  }
+
+  .section-frame,
+  .hero {
+    padding-bottom: 52px;
+  }
+}
