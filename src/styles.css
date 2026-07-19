@@ -1,0 +1,802 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+/* ========================================================================== 
+   1. Theme tokens and document reset
+   ========================================================================== */
+
+:root {
+  --ink: #eef3f7;
+  --muted: #9eabb7;
+  --background: #071018;
+  --panel: #101c26;
+  --cyan: #19d3c5;
+  --orange: #ff8a4c;
+  --line: rgba(255, 255, 255, 0.13);
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: var(--background);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+#root {
+  position: relative;
+}
+
+/* ========================================================================== 
+   2. Reveal.js foundation and typography
+   ========================================================================== */
+
+.reveal {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  background:
+    radial-gradient(circle at 80% 10%, #173748 0, transparent 34%),
+    linear-gradient(135deg, #071018, #0b1620);
+}
+
+.reveal .slides {
+  text-align: left;
+}
+
+.reveal .slides section {
+  height: 100%;
+  padding: 0;
+}
+
+.reveal h1,
+.reveal h2,
+.reveal h3 {
+  margin: 0;
+  color: var(--ink);
+  font-family: 'Space Grotesk', sans-serif;
+  line-height: 0.98;
+  text-transform: none;
+}
+
+.reveal h1 {
+  font-size: 5.8rem;
+  letter-spacing: -0.07em;
+}
+
+.reveal h1 span {
+  color: var(--cyan);
+}
+
+.reveal h2 {
+  font-size: 3.9rem;
+  letter-spacing: -0.05em;
+}
+
+.reveal h3 {
+  font-size: 1.7rem;
+}
+
+.reveal p,
+.reveal li {
+  color: var(--muted);
+  font-size: 1.18rem;
+  line-height: 1.5;
+}
+
+/* ========================================================================== 
+   3. Shared slide layout
+   ========================================================================== */
+
+.section-frame,
+.hero {
+  position: relative;
+  height: 100%;
+  padding: 72px 96px 58px;
+}
+
+.eyebrow,
+.kicker {
+  color: var(--cyan) !important;
+  font-size: 0.84rem !important;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+.lead {
+  max-width: 850px;
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.two-col,
+.skills,
+.contact {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 72px;
+  align-items: center;
+}
+
+.down-hint {
+  position: absolute;
+  bottom: 35px;
+  color: var(--cyan);
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+}
+
+/* ========================================================================== 
+   4. Cover slide
+   ========================================================================== */
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(300px, 0.65fr);
+  gap: 64px;
+  align-items: center;
+  height: 78%;
+}
+
+.hero h2 {
+  margin-top: 1.4rem;
+  font-size: 2rem;
+}
+
+.hello {
+  margin: 0;
+}
+
+.hero-card,
+.edu-card,
+.contact-card {
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  background: rgba(16, 28, 38, 0.8);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.22);
+}
+
+.hero-card,
+.contact-card {
+  padding: 2.2rem;
+}
+
+.personal-logo-frame {
+  display: grid;
+  place-items: center;
+  width: 180px;
+  height: 120px;
+  margin-bottom: 2rem;
+  overflow: hidden;
+  border-radius: 18px;
+}
+
+.personal-logo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.pill-row,
+.skill-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 1.8rem;
+}
+
+.pill-row span,
+.skill-cloud span {
+  padding: 0.55rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 0.9rem;
+}
+
+.letter {
+  padding-left: 2rem;
+  border-left: 2px solid var(--cyan);
+}
+
+.signature {
+  color: var(--ink) !important;
+  font-weight: 700;
+}
+
+/* ========================================================================== 
+   5. Work-experience timeline
+   ========================================================================== */
+
+.timeline {
+  position: absolute;
+  z-index: 20;
+  top: 20px;
+  right: 4%;
+  left: 4%;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.timeline button {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    'dot time'
+    'dot company';
+  gap: 0 8px;
+  padding: 2px 4px;
+  border: 0;
+  color: var(--muted);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  opacity: 0.45;
+}
+
+.timeline button.active {
+  color: var(--ink);
+  opacity: 1;
+}
+
+.timeline .dot {
+  grid-area: dot;
+  width: 13px;
+  height: 13px;
+  margin-top: 4px;
+  border: 2px solid var(--role-color);
+  border-radius: 50%;
+}
+
+.timeline button.active .dot {
+  background: var(--role-color);
+  box-shadow: 0 0 18px var(--role-color);
+}
+
+.time {
+  grid-area: time;
+  font-size: 0.75rem;
+}
+
+.timeline-company {
+  grid-area: company;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+/* Timeline logos have no white tile and no decorative border. */
+.timeline-logo {
+  display: block;
+  width: auto;
+  max-width: 72px;
+  height: 24px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.timeline-logo.logo-square {
+  width: 24px;
+  height: 24px;
+}
+
+.timeline-logo.logo-portrait {
+  width: 22px;
+  height: 28px;
+}
+
+.timeline-logo.logo-fallback {
+  display: grid;
+  place-items: center;
+  width: auto;
+  min-width: 42px;
+  color: var(--muted);
+  font-size: 0.6rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* ========================================================================== 
+   6. Work-experience detail and employer logos
+   ========================================================================== */
+
+.role-layout {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: 72px;
+  align-items: center;
+  padding-top: 12vh;
+}
+
+/*
+ * This is only a transparent positioning area. It adds no circle, border,
+ * badge, or white background around the supplied employer artwork.
+ */
+.brand-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 280px;
+  height: 230px;
+  padding: 0;
+  background: transparent;
+}
+
+.brand-logo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.28));
+}
+
+/* Square emblems such as BMW are intentionally large and independent. */
+.brand-logo.logo-square {
+  width: min(220px, 100%);
+  height: min(220px, 100%);
+}
+
+/* Wide wordmarks use the available width but less vertical space. */
+.brand-logo.logo-wide {
+  width: 100%;
+  height: 145px;
+}
+
+/* Portrait marks remain contained and are never cropped. */
+.brand-logo.logo-portrait {
+  width: 170px;
+  height: 220px;
+}
+
+.brand-logo.logo-fallback {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 120px;
+  color: var(--ink);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  filter: none;
+}
+
+.role-layout li {
+  margin: 0.7rem 0;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.metrics div {
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.metrics b {
+  display: block;
+  color: var(--cyan);
+  font: 700 2.1rem 'Space Grotesk', sans-serif;
+}
+
+.metrics span {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* Keep long cover-letter copy readable on large screens. */
+.two-col > * {
+  min-width: 0;
+}
+
+.letter {
+  width: 100%;
+  max-width: 720px;
+  max-height: 610px;
+  padding-right: 22px;
+  overflow-y: auto;
+}
+
+.letter p {
+  margin: 0 0 1rem;
+  font-size: 1.05rem;
+  line-height: 1.55;
+}
+
+/* Stacked marks such as Marelli need more height than a wide wordmark. */
+.brand-logo.logo-stacked {
+  width: 230px;
+  height: 205px;
+}
+
+.timeline-logo.logo-stacked {
+  width: 28px;
+  height: 25px;
+}
+
+/* ========================================================================== 
+   7. Projects
+   ========================================================================== */
+
+.project-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 72px;
+  align-items: center;
+}
+
+.project-visual {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+}
+
+.drone {
+  z-index: 2;
+  color: var(--cyan);
+  font-size: 7rem;
+}
+
+.orbit {
+  position: absolute;
+  border: 1px dashed rgba(25, 211, 197, 0.45);
+  border-radius: 50%;
+}
+
+.orbit-one {
+  inset: 12%;
+}
+
+.orbit-two {
+  inset: 27%;
+}
+
+.project-visual span {
+  position: absolute;
+  color: var(--muted);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+}
+
+.project-visual span:nth-of-type(1) {
+  top: 8%;
+}
+
+.project-visual span:nth-of-type(2) {
+  bottom: 15%;
+  left: 0;
+}
+
+.project-visual span:nth-of-type(3) {
+  top: 45%;
+  right: -3%;
+}
+
+blockquote {
+  margin: 0;
+  color: var(--ink);
+  font: 500 2.35rem / 1.2 'Space Grotesk', sans-serif;
+}
+
+/* ========================================================================== 
+   8. Education logos and cards
+   ========================================================================== */
+
+.education {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+  align-items: stretch;
+}
+
+.edu-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 1.55rem;
+}
+
+/*
+ * Education source images use different aspect ratios. A fixed stage keeps
+ * all three cards aligned while object-fit: contain prevents logo cropping.
+ */
+.education-logo-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 190px;
+  margin-bottom: 1.2rem;
+  padding: 12px;
+  overflow: hidden;
+  border-radius: 18px;
+  background: #ffffff;
+}
+
+.education-logo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.education-logo.logo-wide {
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+}
+
+/* Cairo University's portrait artwork needs extra height and less width. */
+.education-logo.logo-portrait {
+  width: 68%;
+  height: 100%;
+  padding: 0;
+}
+
+.edu-card b,
+.publication-list b {
+  color: var(--cyan);
+}
+
+.edu-card h3 {
+  margin: 0.8rem 0 0.65rem;
+  font-size: 1.45rem;
+  line-height: 1.12;
+}
+
+.edu-card p {
+  margin: 0.25rem 0;
+  font-size: 1rem;
+}
+
+.edu-card .institution {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.publication-list {
+  margin-top: 3rem;
+}
+
+.publication-list div {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  padding: 1.4rem 0;
+  border-top: 1px solid var(--line);
+  font-size: 1.2rem;
+}
+
+/* ========================================================================== 
+   9. Contact and Reveal.js controls
+   ========================================================================== */
+
+.contact-card a,
+.contact-card p {
+  display: block;
+  margin: 1rem 0;
+  color: var(--ink);
+  font-size: 1.2rem;
+  text-decoration: none;
+}
+
+.reveal .controls {
+  color: var(--cyan);
+}
+
+.reveal .progress {
+  color: var(--orange);
+}
+
+/* ========================================================================== 
+   10. Large desktop layout
+   ========================================================================== */
+
+@media (min-width: 1700px) {
+  /* Reveal remains centered at its 1440 × 900 design size. */
+  .reveal {
+    max-width: 1440px;
+    max-height: 900px;
+    margin: auto;
+  }
+
+  body {
+    display: grid;
+    place-items: center;
+  }
+}
+
+/* ========================================================================== 
+   11. Tablet and mobile layout
+   ========================================================================== */
+
+@media (max-width: 800px) {
+  .hero-grid,
+  .two-col,
+  .skills,
+  .contact,
+  .project-layout,
+  .role-layout,
+  .education {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-card {
+    display: none;
+  }
+
+  .section-frame,
+  .hero {
+    padding: 70px 58px 52px;
+  }
+
+  .timeline {
+    display: flex;
+    gap: 17px;
+    overflow-x: auto;
+  }
+
+  .timeline button {
+    min-width: 93px;
+  }
+
+  .timeline-logo {
+    max-width: 58px;
+    height: 21px;
+  }
+
+  .timeline-logo.logo-square {
+    width: 21px;
+    height: 21px;
+  }
+
+  .role-layout {
+    gap: 1rem;
+    padding-top: 17vh;
+  }
+
+  .brand-mark {
+    width: 145px;
+    height: 110px;
+  }
+
+  .brand-logo.logo-square {
+    width: 105px;
+    height: 105px;
+  }
+
+  .brand-logo.logo-wide {
+    height: 85px;
+  }
+
+  .brand-logo.logo-stacked {
+    width: 105px;
+    height: 100px;
+  }
+
+  .metrics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .reveal h1 {
+    font-size: 3.7rem;
+  }
+
+  .reveal h2 {
+    font-size: 2.35rem;
+  }
+
+  .reveal p,
+  .reveal li {
+    font-size: 1rem;
+  }
+
+  .project-visual {
+    width: 230px;
+  }
+
+  .education {
+    gap: 0.75rem;
+    overflow-y: auto;
+  }
+
+  .edu-card {
+    display: grid;
+    grid-template-columns: 105px 1fr;
+    column-gap: 1rem;
+    padding: 1rem;
+  }
+
+  .education-logo-stage {
+    grid-row: 1 / span 5;
+    width: 105px;
+    height: 125px;
+    margin: 0;
+    padding: 7px;
+  }
+
+  .edu-card h3 {
+    margin: 0.35rem 0;
+    font-size: 1.15rem;
+  }
+
+  .edu-card p {
+    font-size: 0.88rem;
+  }
+
+  .letter {
+    max-height: 68vh;
+    overflow: auto;
+  }
+
+  .publication-list div {
+    grid-template-columns: 45px 1fr;
+  }
+
+  .down-hint {
+    bottom: 20px;
+  }
+}
+
+/* ========================================================================== 
+   12. Short laptop screens
+   ========================================================================== */
+
+@media (max-height: 650px) {
+  .section-frame,
+  .hero {
+    padding-top: 13vh;
+  }
+
+  .reveal p,
+  .reveal li {
+    font-size: 0.88rem;
+  }
+
+  .role-layout li {
+    margin: 0.28rem 0;
+  }
+
+  .hero-card {
+    padding: 1.2rem;
+  }
+
+  .metrics {
+    margin-top: 0.7rem;
+  }
+
+  .timeline {
+    top: 8px;
+  }
+
+  .education-logo-stage {
+    height: 145px;
+  }
+
+  .edu-card {
+    padding: 1rem;
+  }
+}
