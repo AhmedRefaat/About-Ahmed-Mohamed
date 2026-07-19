@@ -12,6 +12,7 @@ import './styles.css';
  * Import a new logo only after the corresponding file exists.
  */
 import ahmedLogo from './assets/ahmed-logo.png';
+import myPhoto from './assets/me.JPG';
 import bmwLogo from './assets/bmw-logo.svg';
 import kpitLogo from './assets/kpit-logo.svg';
 import marelliLogo from './assets/marelli-logo.svg';
@@ -344,21 +345,32 @@ function App() {
                 </div>
               </div>
 
-              <div className="hero-card">
-                <div className="personal-logo-frame">
+              <aside className="hero-profile" aria-label="Profile summary">
+                <div className="profile-photo-frame">
                   <img
-                    className="personal-logo"
+                    className="profile-photo"
+                    src={myPhoto}
+                    alt="Ahmed Mohamed standing outdoors"
+                  />
+                </div>
+
+                <div className="profile-summary">
+                  <img
+                    className="profile-signature-logo"
                     src={ahmedLogo}
                     alt="Ahmed Mohamed personal logo"
                   />
+                  <p className="profile-location">Freising, Germany</p>
+                  <p>
+                    Automotive technical leader focused on embedded systems,
+                    vehicle networks, cybersecurity and cross-functional delivery.
+                  </p>
+                  <p className="profile-status">
+                    Available for technical leadership, product security and
+                    domain ownership roles
+                  </p>
                 </div>
-                <p>Based in Germany</p>
-                <p>German national</p>
-                <p>
-                  Available for technical leadership, product security and
-                  domain ownership roles
-                </p>
-              </div>
+              </aside>
             </div>
 
             <div className="down-hint">↓ Read cover letter</div>

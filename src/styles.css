@@ -145,10 +145,13 @@ body,
 
 .hero-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.55fr) minmax(300px, 0.65fr);
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(400px, 430px);
   gap: 64px;
   align-items: center;
-  height: 78%;
+  width: 100%;
+  height: 100%;
 }
 
 .hero h2 {
@@ -174,21 +177,84 @@ body,
   padding: 2.2rem;
 }
 
-.personal-logo-frame {
+.hero-profile {
   display: grid;
-  place-items: center;
-  width: 180px;
-  height: 120px;
-  margin-bottom: 2rem;
+  grid-template-rows: 440px auto;
+  width: 100%;
+  max-width: 430px;
+  max-height: 720px;
   overflow: hidden;
-  border-radius: 18px;
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  background: rgba(16, 28, 38, 0.9);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.3);
 }
 
-.personal-logo {
+.profile-photo-frame {
+  position: relative;
+  width: 100%;
+  height: 440px;
+  overflow: hidden;
+  background: #102334;
+}
+
+.profile-photo {
   display: block;
   width: 100%;
   height: 100%;
+  object-fit: cover;
+  object-position: 54% 52%;
+  transform: scale(2.15);
+  transform-origin: 54% 52%;
+  backface-visibility: hidden;
+}
+
+.profile-photo-frame::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 22%;
+  content: '';
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent, rgba(16, 28, 38, 0.92));
+}
+
+.profile-summary {
+  position: relative;
+  z-index: 2;
+  padding: 1.2rem 1.55rem 1.5rem;
+}
+
+.profile-signature-logo {
+  display: block;
+  width: 92px;
+  height: 54px;
+  margin-bottom: 0.5rem;
   object-fit: contain;
+  object-position: left center;
+}
+
+.profile-summary p {
+  margin: 0.45rem 0;
+  font-size: 0.94rem;
+  line-height: 1.45;
+}
+
+.profile-location {
+  color: var(--ink) !important;
+  font-size: 1rem !important;
+  font-weight: 700;
+}
+
+.profile-status {
+  margin-top: 0.85rem !important;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--line);
+  color: var(--cyan) !important;
+  font-size: 0.88rem !important;
+  font-weight: 600;
+  line-height: 1.4 !important;
 }
 
 .pill-row,
@@ -630,10 +696,98 @@ blockquote {
 }
 
 /* ========================================================================== 
-   11. Tablet and mobile layout
+   11. Tablet profile layout
+   ========================================================================== */
+
+@media (max-width: 1100px) and (min-width: 801px) {
+  .hero-grid {
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(330px, 360px);
+    gap: 42px;
+  }
+
+  .hero-profile {
+    max-width: 360px;
+    grid-template-rows: 360px auto;
+  }
+
+  .profile-photo-frame {
+    height: 360px;
+  }
+
+  .profile-summary {
+    padding: 1rem 1.2rem 1.2rem;
+  }
+
+  .profile-summary p {
+    font-size: 0.82rem;
+    line-height: 1.4;
+  }
+
+  .profile-location {
+    font-size: 0.9rem !important;
+  }
+
+  .profile-status {
+    font-size: 0.78rem !important;
+  }
+}
+
+/* ========================================================================== 
+   12. Tablet and mobile layout
    ========================================================================== */
 
 @media (max-width: 800px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+    align-content: center;
+    height: 100%;
+  }
+
+  .hero-profile {
+    grid-template-columns: 145px minmax(0, 1fr);
+    grid-template-rows: 180px;
+    width: 100%;
+    max-width: none;
+    border-radius: 20px;
+  }
+
+  .profile-photo-frame {
+    width: 145px;
+    height: 180px;
+  }
+
+  .profile-photo {
+    object-position: 54% 51%;
+    transform: scale(2.25);
+    transform-origin: 54% 51%;
+  }
+
+  .profile-summary {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0.75rem 0.9rem;
+  }
+
+  .profile-signature-logo {
+    width: 58px;
+    height: 32px;
+    margin-bottom: 0.15rem;
+  }
+
+  .profile-summary p {
+    margin: 0.18rem 0;
+    font-size: 0.66rem;
+    line-height: 1.28;
+  }
+
+  .profile-status {
+    margin-top: 0.35rem !important;
+    padding-top: 0.35rem;
+  }
   .hero-grid,
   .two-col,
   .skills,
@@ -642,10 +796,6 @@ blockquote {
   .role-layout,
   .education {
     grid-template-columns: 1fr;
-  }
-
-  .hero-card {
-    display: none;
   }
 
   .section-frame,
@@ -762,7 +912,7 @@ blockquote {
 }
 
 /* ========================================================================== 
-   12. Short laptop screens
+   13. Short laptop screens
    ========================================================================== */
 
 @media (max-height: 650px) {
